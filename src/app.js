@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const {ErrorType} = require('./helper/enum')
 const app = express();
+
 const createDefaultTables = require('./helper/createTables');
 const responseHandler = require('./middleware/responseHandler');
 const errorHandler = require('./middleware/errorHandler');

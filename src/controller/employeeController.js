@@ -3,7 +3,7 @@ const {ErrorType} = require('../helper/enum');
 const appError = require("../helper/error.helper");
 const {sendResponse, sendResponseMessage} = require('../helper/response.helper');
 const util = require('util');
-
+const JWT_generator = require('../helper/signJWT');
 const querys= util.promisify(db.query).bind(db)
 const postSignUp = async (req,res,next)=>{
     try {
@@ -38,13 +38,14 @@ const postSignUp = async (req,res,next)=>{
 const postlogin = async (req,res,next)=>{
     try {
         const {email_id, password } =req.body;
-        const Checker = await querys(`SELECT email_id, password FROM employee WHERE email_id = "${email_id}" LIMIT 1`);
+        const Checker = await querys(`SELECT emp_id, email_id, password FROM employee WHERE email_id = "${email_id}" LIMIT 1`);
         if( Checker.length <1){
             return sendResponseMessage(401,res,"You are not register");
         }
-        console.log(Checker[0].email_id,  email_id, Checker[0].password , password);
+        
         if(Checker[0].email_id == email_id && Checker[0].password == password){
-            return sendResponseMessage(200,res,"Login success....")
+            const accessToken = JWT_generator(Checker[0].emp_id);
+            return sendResponse(200,res,{message:"Log in success...", accessToken: accessToken})
         }
         return sendResponseMessage(401,res,"Email id or password is wrong")
     } catch (error) {
