@@ -1,0 +1,15 @@
+{
+    "development":{
+            "host":"localhost",
+            "user":"root",
+            "database":"EmployeeDatas",
+            "password":"",
+            "multipleStatements": true
+    },
+    "test":{
+
+    },
+    "production":{
+
+    }
+}
